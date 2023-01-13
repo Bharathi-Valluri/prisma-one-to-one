@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Roles {
+  RoleID      Int      @id @default(autoincrement())
+  RoleName    String   @unique
+  createdDate DateTime @default(now())
+  user        Users?
+  // relation scalar field (used in the `@relation` attribute above)
+}
+
+model Users {
+  id          Int      @id @default(autoincrement())
+  firstName   String   @unique
+  lastName    String
+  EmailID     String
+  Password    String
+  PhoneNumber String
+  createdDate DateTime @default(now())
+  RoleId      Roles    @relation(fields: [roleId], references: [RoleID])
+  roleId      Int      @unique
+}
