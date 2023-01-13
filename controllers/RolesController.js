@@ -112,5 +112,25 @@ const updateUser = async (req, res) => {
     })
   }
 }
+const deleteUser = async (req, res) => {
+  let userid = req.params['id']
+  try {
+    const resp = await prisma.Users.delete({
+      where: { id: userid }
+    })
+    res.status(200).json({
+      status: appConst.status.success,
+      response: resp,
+      message: 'Deleted!!'
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      status: appConst.status.fail,
+      response: null,
+      message: 'failed'
+    })
+  }
+}
 
 module.exports = { saveUserCredentials, saveRoles, getAllRecords, updateUser }
