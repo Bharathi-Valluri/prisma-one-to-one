@@ -121,7 +121,7 @@ const deleteUser = async (req, res) => {
       include: { RoleId: true }
     })
     res.status(200).json({
-      status: appConst.status.success,
+      status: appConst.status.delete_user,
       response: resp,
       message: 'Deleted!!'
     })
