@@ -80,21 +80,22 @@ const getAllRecords = async (req, res) => {
 }
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.body.id
+    const salt = await bcrypt.genSalt(10)
+    console.log(salt)
+    const encryptedPassword = await bcrypt.hash(req.body.Password, salt)
+    console.log(encryptedPassword)
+    req.body.Password = encryptedPassword
     const resp = await prisma.Users.update({
-      where: { id: id },
+      where: {
+        roleId: req.body.roleId
+      },
       data: {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         EmailID: req.body.EmailID,
         Password: req.body.Password,
         PhoneNumber: req.body.PhoneNumber,
-        roleId: req.body.roleId,
-        Roles: {
-          update: {
-            RoleName: req.body.RoleName
-          }
-        }
+        roleId: req.body.roleId
       },
       include: { RoleId: true }
     })
@@ -113,10 +114,11 @@ const updateUser = async (req, res) => {
   }
 }
 const deleteUser = async (req, res) => {
-  let userid = req.params['id']
+  let roleId = req.body['roleId']
   try {
     const resp = await prisma.Users.delete({
-      where: { id: userid }
+      where: { id: roleId },
+      include: { RoleId: true }
     })
     res.status(200).json({
       status: appConst.status.success,
@@ -133,4 +135,10 @@ const deleteUser = async (req, res) => {
   }
 }
 
-module.exports = { saveUserCredentials, saveRoles, getAllRecords, updateUser }
+module.exports = {
+  saveUserCredentials,
+  saveRoles,
+  getAllRecords,
+  updateUser,
+  deleteUser
+}
