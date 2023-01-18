@@ -14,7 +14,7 @@ model Roles {
   RoleID      Int      @id @default(autoincrement())
   RoleName    String   @unique
   createdDate DateTime @default(now())
-  user        Users?
+  user        Users[]
   // relation scalar field (used in the `@relation` attribute above)
 }
 
@@ -26,6 +26,6 @@ model Users {
   Password    String
   PhoneNumber String
   createdDate DateTime @default(now())
-  RoleId      Roles    @relation(fields: [roleId], references: [RoleID])
-  roleId      Int      @unique
+  Role        Roles    @relation(fields: [roleId], references: [RoleID])
+  roleId      Int
 }
