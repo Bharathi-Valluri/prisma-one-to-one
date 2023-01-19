@@ -21,8 +21,6 @@ const addUserDetails = async (req, res) => {
             firstName: element.firstName,
             lastName: element.lastName,
             EmailID: element.EmailID,
-            Password: element.Password,
-            PhoneNumber: element.PhoneNumber,
             Role: {
               create: {
                 RoleName: element.RoleName
@@ -42,8 +40,6 @@ const addUserDetails = async (req, res) => {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           EmailID: req.body.EmailID,
-          Password: req.body.Password,
-          PhoneNumber: req.body.PhoneNumber,
           Role: {
             create: {
               RoleName: req.body.RoleName
@@ -81,55 +77,29 @@ const addUserDetails = async (req, res) => {
   }
 }
 
-// const saveUserCredentials = async (req, res) => {
-//   try {
-//     const salt = await bcrypt.genSalt(10)
-//     console.log(salt)
-//     const encryptedPassword = await bcrypt.hash(req.body.Password, salt)
-//     console.log(encryptedPassword)
-//     req.body.Password = encryptedPassword
-//     const resp1 = await prisma.Users.create({
-//       data: {
-//         firstName: req.body.firstName,
-//         lastName: req.body.lastName,
-//         EmailID: req.body.EmailID,
-//         Password: req.body.Password,
-//         PhoneNumber: req.body.PhoneNumber,
-//         roleId: req.body.roleId
-//       }
-//     })
-//     console.log(resp1)
-//   } catch (error) {
-//     console.log(error)
-//     res.status(400).json({
-//       status: appConst.status.fail,
-//       response: null,
-//       message: 'failed'
-//     })
-//   }
-// }
-// const saveRoles = async (req, res) => {
-//   try {
-//     const resp = await prisma.Roles.create({
-//       data: {
-//         RoleName: req.body.RoleName
-//       }
-//     })
-//     console.log(resp)
-//     res.status(200).json({
-//       status: appConst.status.Success,
-//       response: resp,
-//       message: 'success!!!'
-//     })
-//   } catch (error) {
-//     console.log(error)
-//     res.status(400).json({
-//       status: appConst.status.fail,
-//       response: null,
-//       message: 'failed!!...'
-//     })
-//   }
-// }
+const saveUserCredentials = async (req, res) => {
+  try {
+    const user = await prisma.Roles.create({
+      data: req.body
+    })
+
+    console.log(user)
+    // console.log(transaction);
+
+    res.status(200).json({
+      status: appConst.status.success,
+      response: user,
+      message: 'success'
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      status: appConst.status.fail,
+      response: null,
+      message: 'failed'
+    })
+  }
+}
 const getAllRecords = async (req, res) => {
   try {
     const users = await prisma.Users.findMany({
@@ -219,5 +189,6 @@ module.exports = {
   addUserDetails,
   getAllRecords,
   updateUser,
-  deleteUser
+  deleteUser,
+  saveUserCredentials
 }

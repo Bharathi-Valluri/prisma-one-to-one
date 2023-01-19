@@ -1,6 +1,6 @@
 const role_controller = require('../controllers/RolesController')
 const router = require('express').Router()
-// router.post('/saveUserDetails', role_controller.saveUserCredentials)
+router.post('/save', role_controller.saveUserCredentials)
 // router.post('/saveRoles', role_controller.saveRoles)
 router.post('/saveuser', role_controller.addUserDetails)
 router.get('/fetchAll', role_controller.getAllRecords)
